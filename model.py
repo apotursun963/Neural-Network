@@ -6,7 +6,7 @@ It makes predictions using forward propagation, computes errors with backpropaga
 and updates parameters (weights and biases) to train the model.
 
 tr:
-Bu dosya, Çok katmanlı (MLP) yapay sinir ağı sınıfını (NeuralNet) içerir.
+Bu kod, Çok katmanlı (MLP) yapay sinir ağı sınıfını (NeuralNet) tanımlar.
 Sinir ağı giriş katmanı, gizli katmanlar ve çıkış katmanını içerir.
 ileri besleme ile tahminler yapar, geri yayılım ile hataları hesaplar ve
 parametreleri (ağırlıklar ve biaslar) güncelleyerek modeli eğitir.
@@ -26,7 +26,7 @@ class NeuralNet:
         ) -> None:
 
         self.layer: int = len(hidden_units)
-        self.weights: List[np.ndarray] =[]
+        self.weights: List[np.ndarray] = []
         self.biases: List[np.ndarray] = []
 
         # input to hidden weights & bias
@@ -49,6 +49,7 @@ class NeuralNet:
 
         self.hidden_output: List[np.ndarray] = []
         output = X
+            
         # hidden layers outputs
         for i in range(self.layer):
             output = relu(np.dot(output, self.weights[i]) + self.biases[i])   
