@@ -8,7 +8,7 @@ Finally, after training is complete, the model's weights and bias values are sav
 
 tr:
 Bu kod, MNIST veri kümesi ile çok katmanlı bir yapay sinir ağı (MLP) modelini eğitmek için yazılmıştır.
-Veri, 28x28 piksel boyutundaki el yazısı rakamları içerir ve mode, 
+Veri, 28x28 piksel boyutundaki el yazısı rakamları içerir ve model, 
 bu rakamları doğru bir şekilde sınıflandırmayı öğrenir. Kod, öncelikle verileri yükleyip 
 normalize eder (belirli aralıklara ölçekler) ardından NeuralNet sınıfını kullanarak bir model oluşturur ve eğitir.
 Eğitim sırasında kayıp ve doğruluk değerleri hesaplanır ve görselleştirilir.
@@ -16,8 +16,8 @@ Son olarak, eğitim tamamlandığında modelin ağırlıkları ve bias değerler
 """
 
 """
-Training results
-----------------
+Training results (Eğitim Sonuçları)
+-----------------------------------
 Epoch: 2000 | Loss: 0.05188147086640287 | Accuracy: %98.64
 Training Duration of the Model: 23.92 minute
 """
@@ -39,7 +39,6 @@ def load_and_preprocess_data() -> Tuple[np.ndarray, np.ndarray]:
     print(f"x_train shape: {x_train.shape}\ny_train shape: {y_train.shape}")
     return (x_train, y_train)
 
-
 # Building the MLP model from NeuralNet class
 def train_model(x_train: np.ndarray, y_train: np.ndarray) -> Tuple[List[np.ndarray], List[np.ndarray], List[float], List[float]]: 
     model = NeuralNet(
@@ -49,7 +48,7 @@ def train_model(x_train: np.ndarray, y_train: np.ndarray) -> Tuple[List[np.ndarr
     )
 
     # HyperParameters
-    learning_rate: float = 1e-1             # 1e-1 -> 0.01           (1e-1: exponential notation)
+    learning_rate: float = 1e-1                 # 1e-1 -> 0.01           (1e-1: exponential notation)
     epochs: int = 2000  
 
     time_1: float = time.time()
@@ -57,7 +56,6 @@ def train_model(x_train: np.ndarray, y_train: np.ndarray) -> Tuple[List[np.ndarr
     time_2: float = time.time()
     print(f"Training Duration of the Model: {(time_2 - time_1) / 60:.2f} minute")
     return (weights, biases, loss_list, accuracy_list)
-
 
 # Ploting the accuracy and losses of the model
 def plot_acc_loss(loss_list: List[float], accuracy_list: List[float]) -> None:
@@ -74,17 +72,15 @@ def plot_acc_loss(loss_list: List[float], accuracy_list: List[float]) -> None:
     axs[0].set_ylabel("Loss")
     axs[0].legend()
     axs[0].grid(True)
-
+    
     plt.tight_layout()
     plt.show()
-
 
 # Saving the parameters
 def savae_parameters(weights: List[np.ndarray], biases: List[np.ndarray]) -> None:
     for idx, (weight, bias) in enumerate(zip(weights, biases)):
         np.save(f"Weight{idx+1}.npy", weight)
         np.save(f"Bias{idx+1}.npy", bias)
-
 
 # Main function
 def main() -> None:
