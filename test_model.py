@@ -15,9 +15,9 @@ Son olarak, modelin doğruluk oranı ve kayıp oranı hesaplanır ve test görü
 """
 
 """
-Testing results
-***************
-Testing images: 10.000 images with 28x28 piksel
+Testing results (Test Sonuçları)
+--------------------------------
+Testing images: 10.000 images 
 number of false: 283 | number of correct: 9717
 Accuracy rate for 10.000 image is: 97.17 %
 Loss rate for 10.000 image is: 2.83 %
@@ -40,14 +40,12 @@ def load_and_preprocess_data() -> Tuple[np.ndarray, np.ndarray]:
     print(f"x_test: {x_test.shape}\ny_test: {y_test.shape}")
     return (x_test, y_test)
 
-
 # load the parameters
 def load_param():
     W_lst = [np.load(f"Parameters\\Weight{i+1}.npy") for i in range(4)]
     B_lst = [np.load(f"Parameters\\Bias{i+1}.npy") for i in range(4)]
     return (W_lst, B_lst)
     
-
 # Prediction the model
 def predict(idx: int, X: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.ndarray]):
     X = X[idx]
@@ -59,7 +57,6 @@ def predict(idx: int, X: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.nda
     final_output = softmax(np.dot(hidden_outputs[-1], W_lst[-1]) + B_lst[-1])
     return (final_output)
 
-
 # Testing the model
 def test_mdl(x_test: int, y_test: int, W_lst: List[np.ndarray], B_lst: List[np.ndarray]) -> int:
     n_correct, n_false = 0 , 0
@@ -69,13 +66,11 @@ def test_mdl(x_test: int, y_test: int, W_lst: List[np.ndarray], B_lst: List[np.n
         n_false += np.argmax(y_test[idx]) != mdl_pred               # +0
     return (n_correct, n_false)
 
-
 # Calculate accuracy and loss rating
 def acc_loss(n_true: int, n_false: int, x_test: int) -> None:
     print(f"number of false: {n_false} | number of correct: {n_true}")
     print(f"Accuracy rate for {len(x_test)} image is: {(n_true / (n_true + n_false)) * 100:.2f} %") 
     print(f"Loss rate for {len(x_test)} image is: {(n_false / (n_true + n_false)) * 100:.2f} %") 
-
 
 # Ploting the sample of x_test
 def plot_img(x_test: np.ndarray, y_test: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.ndarray]) -> None:
@@ -88,7 +83,7 @@ def plot_img(x_test: np.ndarray, y_test: np.ndarray, W_lst: List[np.ndarray], B_
         plt.axis("off")
     plt.show()
 
-
+# Main function to execute the program
 def main() -> None:
     x_test, y_test = load_and_preprocess_data()
     W_ls, B_ls = load_param()
@@ -98,3 +93,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    
