@@ -2,13 +2,13 @@
 en
 This file contains the function necessary of the model
 Activation functions: softmax(), relu(), relu_derivative()
-Metrics: calculate_accuracy()
+Metrics: accuracy()
 Losses: cross_entropy_loss()
 
 tr
 Bu dosyaya model için gerekli olan fonksiyonlar yazılmıştır.
 Aktivasyon fonksyionları: softmax(), relu(), relu_derivative()
-Metrik(performans ölçütleri): calculate_accuracy()
+Metrik(performans ölçütleri): accuracy()
 Kayıp: cross_entropy_loss()
 """
 
@@ -28,12 +28,12 @@ def softmax(x):
 
 def relu(x):
     """
-    tr: relu, Sinir ağa'daki gizli katmanlarda kullanılan ve doğrusal olmayan (non-linear) bir fonksiyondur.
-    temel mantığı, negatif değerleri sıfırlaması ve pozitif değerleri olduğu gibi bırakmasıdır. buda modelin hızlı öğrenmesini sağlar.
-
-    en: reLU, is a non-linear activation function used in the hidden layers of neural networks. 
+    en: relu, is a non-linear activation function used in the hidden layers of neural networks. 
     Its fundamental principle is to zero out negative values while allowing positive values to pass through unchanged. 
     This characteristic helps the model learn quickly.
+
+    tr: relu, Sinir ağa'daki gizli katmanlarda kullanılan ve doğrusal olmayan (non-linear) bir fonksiyondur.
+    temel mantığı, negatif değerleri sıfırlaması ve pozitif değerleri olduğu gibi bırakmasıdır. buda modelin hızlı öğrenmesini sağlar.
     """
     return (np.maximum(0, x))
 
