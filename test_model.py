@@ -34,7 +34,7 @@ import numpy as np
 
 # Data Pre-Processing
 def load_and_preprocess_data() -> Tuple[np.ndarray, np.ndarray]:
-    (_, _), (x_test, y_test) = mnist.load_data()
+    (_ , _), (x_test, y_test) = mnist.load_data()
     x_test = x_test.reshape(10000, 28*28) / 255.0 
     y_test = to_categorical(y_test, num_classes=10)
     print(f"x_test: {x_test.shape}\ny_test: {y_test.shape}")
@@ -59,11 +59,11 @@ def predict(idx: int, X: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.nda
 
 # Testing the model
 def test_mdl(x_test: int, y_test: int, W_lst: List[np.ndarray], B_lst: List[np.ndarray]) -> int:
-    n_correct, n_false = 0 , 0
+    n_correct = 0; n_false = 0
     for idx in range(len(x_test)):
         mdl_pred = np.argmax(predict(idx, x_test, W_lst, B_lst))
-        n_correct += np.argmax(y_test[idx]) == mdl_pred             # +1
-        n_false += np.argmax(y_test[idx]) != mdl_pred               # +0
+        n_correct += (np.argmax(y_test[idx]) == mdl_pred)             # condition return True or False 
+        n_false += (np.argmax(y_test[idx]) != mdl_pred)               # if True +1 else False +0
     return (n_correct, n_false)
 
 # Calculate accuracy and loss rating
