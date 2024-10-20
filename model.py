@@ -19,11 +19,10 @@ import numpy as np
 
 class NeuralNet:
     def __init__(
-            self, 
-            input_unit: int,                    
-            hidden_units: List[int], 
-            output_unit: int
-        ) -> None:
+        self,
+        input_unit: int, 
+        hidden_units: List[int], 
+        output_unit: int) -> None:
 
         self.layer: int = len(hidden_units)
         self.weights: List[np.ndarray] = []
@@ -43,28 +42,31 @@ class NeuralNet:
         self.biases.append(np.zeros((1, output_unit)))  
 
     def forward(
-            self, 
-            X: np.ndarray
-        ) -> np.ndarray:
-
+        self, 
+        X: np.ndarray
+    ) -> np.ndarray:
+        
         self.hidden_output: List[np.ndarray] = []
-        output = X
-            
-        # hidden layers outputs
-        for i in range(self.layer):
-            output = relu(np.dot(output, self.weights[i]) + self.biases[i])   
+
+        # first hidden layer output
+        first_output = relu(np.dot(X, self.weights[0]) + self.biases[0])   
+        self.hidden_output.append(first_output)
+
+        # second and more hidden layers outputs in a loop
+        for i in range(self.layer -1):
+            output = relu(np.dot(self.hidden_output[i], self.weights[i+1]) + self.biases[i+1])   
             self.hidden_output.append(output)
 
-        # output layer final_output
+        # final output of the model
         self.final_output = softmax(np.dot(self.hidden_output[-1], self.weights[-1]) + self.biases[-1])   
         return (self.final_output)
 
     def backward(
-            self, 
-            inputs: np.ndarray, 
-            Y: np.ndarray
-        ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-
+        self, 
+        inputs: np.ndarray, 
+        Y: np.ndarray
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        
         m = Y.shape[0]
         dW: List[np.ndarray] = []
         dB: List[np.ndarray] = []
@@ -78,19 +80,16 @@ class NeuralNet:
         # Error and gradients in the hidden layers
         for i in range(self.layer, 0, -1):
             error_list.append(np.dot(error_list[-1], self.weights[i].T) * relu_derivative(self.hidden_output[i-1]))
-            if i == 1:
-                dW.append((1/m) * np.dot(inputs.T, error_list[-1]))
-            else:
-                dW.append((1/m) * np.dot(self.hidden_output[i-2].T, error_list[-1]))
+            dW.append((1/m) * np.dot(inputs.T if i == 1 else self.hidden_output[i-2].T, error_list[-1]))
             dB.append((1/m) * np.sum(error_list[-1], axis=0))
         return (dW, dB)
 
     def update_parameters(
-            self,
-            dW: List[np.ndarray] , 
-            dB: List[np.ndarray] , 
-            learning_rate: float
-        ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, 
+        dW: List[np.ndarray], 
+        dB: List[np.ndarray], 
+        learning_rate: float
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
 
         for i in range(len(dW)):
             self.weights[i] -= learning_rate * dW[len(dW) -1 -i]        # -> reverse indexing  
@@ -98,13 +97,13 @@ class NeuralNet:
         return (self.weights, self.biases)
 
     def train(
-            self, 
-            X: np.ndarray, 
-            Y: np.ndarray, 
-            epoch: int, 
-            learning_rate: float
-        ) -> Tuple[List[np.ndarray], List[np.ndarray], List[float], List[float]]:
-
+        self, 
+        X: np.ndarray, 
+        Y: np.ndarray,
+        epoch: int, 
+        learning_rate: float
+    ) -> Tuple[List[np.ndarray], List[np.ndarray], List[float], List[float]]:
+        
         loss_list: List[float] = []
         accuracy_list: List[float] = []
 
