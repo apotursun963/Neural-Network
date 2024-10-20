@@ -34,7 +34,7 @@ import time
 # Data Pre-Processing
 def load_and_preprocess_data() -> Tuple[np.ndarray, np.ndarray]:
     (x_train, y_train), (_ , _) = mnist.load_data()
-    x_train: List[np.ndarray] = x_train.reshape(60000, 28*28) / 255.0              # 2D: (28,28) => 1D: (784)
+    x_train: List[np.ndarray] = x_train.reshape(60000, 28*28) / 255.0
     y_train: List[np.ndarray] = to_categorical(y_train, num_classes=10)
     print(f"x_train shape: {x_train.shape}\ny_train shape: {y_train.shape}")
     return (x_train, y_train)
@@ -48,7 +48,7 @@ def train_model(x_train: np.ndarray, y_train: np.ndarray) -> Tuple[List[np.ndarr
     )
 
     # HyperParameters
-    learning_rate: float = 1e-1                 # 1e-1 -> 0.01
+    learning_rate: float = 1e-1
     epochs: int = 2000  
 
     time_1: float = time.time()
