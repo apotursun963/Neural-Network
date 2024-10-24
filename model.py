@@ -22,7 +22,8 @@ class NeuralNet:
         self,
         input_unit: int, 
         hidden_units: List[int], 
-        output_unit: int) -> None:
+        output_unit: int
+    ) -> None:
 
         self.layer: int = len(hidden_units)
         self.weights: List[np.ndarray] = []
