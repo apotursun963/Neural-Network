@@ -13,14 +13,14 @@ from model import NeuralNet
 x_train = x_train.reshape(60000, 28*28) / 255.0
 y_train = to_categorical(y_train, num_classes=10)
 
-# Buildin Model
+# Building Model
 model = NeuralNet(
     input_unit=784,
     hidden_units=[128, 256, 128],
     output_unit=10
 )
 
-# Train Model
+# Training Model
 model.train(x_train, y_train, epoch=2000, learning_rate=0.01)
 ```
 
