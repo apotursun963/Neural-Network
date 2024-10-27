@@ -24,5 +24,5 @@ model = NeuralNet(
 model.train(x_train, y_train, epoch=2000, learning_rate=0.01)
 ```
 
-## accuracy and loss
+## Accuracy && Loss
 ![acc_loss](https://github.com/user-attachments/assets/21e3ae52-a8e8-4d16-b583-86a4d8965daf)
