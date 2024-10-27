@@ -19,7 +19,7 @@ model = NeuralNet(
     output_unit=10
 )
 
-Train Model
+# Train Model
 model.train(x_train, y_train, epoch=2000, learning_rate=0.01)
 ```
 
