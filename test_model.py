@@ -28,12 +28,11 @@ from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
 from model_utils import relu, softmax
 import matplotlib.pyplot as plt 
-from typing import List, Tuple
 import numpy as np
 
 
 # Data Pre-Processing
-def load_and_preprocess_data() -> Tuple[np.ndarray, np.ndarray]:
+def load_and_preprocess_data():
     (_ , _), (x_test, y_test) = mnist.load_data()
     x_test = x_test.reshape(10000, 28*28) / 255.0 
     y_test = to_categorical(y_test, num_classes=10)
@@ -47,7 +46,7 @@ def load_param():
     return (W_lst, B_lst)
     
 # Prediction the model
-def predict(idx: int, X: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.ndarray]):
+def predict(idx, X, W_lst, B_lst):
     X = X[idx]
     output = X 
     hidden_outputs = []
@@ -58,7 +57,7 @@ def predict(idx: int, X: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.nda
     return (final_output)
 
 # Testing the model
-def test_mdl(x_test: int, y_test: int, W_lst: List[np.ndarray], B_lst: List[np.ndarray]) -> int:
+def test_mdl(x_test, y_test, W_lst, B_lst):
     n_correct = 0; n_false = 0
     for idx in range(len(x_test)):
         mdl_pred = np.argmax(predict(idx, x_test, W_lst, B_lst))
@@ -67,13 +66,13 @@ def test_mdl(x_test: int, y_test: int, W_lst: List[np.ndarray], B_lst: List[np.n
     return (n_correct, n_false)
 
 # Calculate accuracy and loss rating
-def acc_loss(n_true: int, n_false: int, x_test: int) -> None:
+def acc_loss(n_true, n_false, x_test):
     print(f"number of false: {n_false} | number of correct: {n_true}")
     print(f"Accuracy rate for {len(x_test)} image is: {(n_true / (n_true + n_false)) * 100:.2f} %") 
     print(f"Loss rate for {len(x_test)} image is: {(n_false / (n_true + n_false)) * 100:.2f} %") 
 
 # Ploting the sample of x_test
-def plot_img(x_test: np.ndarray, y_test: np.ndarray, W_lst: List[np.ndarray], B_lst: List[np.ndarray]) -> None:
+def plot_img(x_test, y_test, W_lst, B_lst):
     plt.figure(figsize=(8, 6))
     for idx in range(len(x_test)):
         prediction = predict(idx, x_test, W_lst, B_lst)
@@ -84,7 +83,7 @@ def plot_img(x_test: np.ndarray, y_test: np.ndarray, W_lst: List[np.ndarray], B_
     plt.show()
 
 # Main function to execute the program
-def main() -> None:
+def main():
     x_test, y_test = load_and_preprocess_data()
     W_ls, B_ls = load_param()
     n_correct, n_false = test_mdl(x_test, y_test, W_ls, B_ls)
