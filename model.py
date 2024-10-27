@@ -14,100 +14,77 @@ parametreleri (ağırlıklar ve biaslar) güncelleyerek modeli eğitir.
 
 
 from model_utils import softmax, relu, relu_derivative, accuracy, cross_entropy_loss
-from typing import List, Tuple
 import numpy as np
 
 class NeuralNet:
-    def __init__(
-        self,
-        input_unit: int, 
-        hidden_units: List[int], 
-        output_unit: int
-    ) -> None:
-
-        self.layer: int = len(hidden_units)
-        self.weights: List[np.ndarray] = []
-        self.biases: List[np.ndarray] = []
+    def __init__(self, input_unit, hidden_units, output_unit):
+        self.hidden_lyrs = len(hidden_units)
+        self.weights = []
+        self.biases = []
 
         # input to hidden weights & bias
-        self.weights.append(np.random.randn(input_unit, hidden_units[0]) * np.sqrt(2 / input_unit))
+        self.weights.append(
+            np.random.randn(input_unit, hidden_units[0]) * np.sqrt(2 / (input_unit + hidden_units[0]))        # Xavir initialize
+        )
         self.biases.append(np.zeros((1, hidden_units[0]))) 
 
         # hidden to hidden weights & biases
-        for i in range(self.layer -1):
-            self.weights.append(np.random.randn(hidden_units[i], hidden_units[i+1]) * np.sqrt(2 / hidden_units[i])) 
+        for i in range(self.hidden_lyrs -1):
+            self.weights.append(
+                np.random.randn(hidden_units[i], hidden_units[i+1]) * np.sqrt(2 / (hidden_units[i] + hidden_units[i+1]))
+            ) 
             self.biases.append(np.zeros((1, hidden_units[i+1]))) 
 
         # last hidden to output weight & bias
-        self.weights.append(np.random.randn(hidden_units[len(hidden_units) -1], output_unit) * np.sqrt(2 / hidden_units[-1])) 
+        self.weights.append(
+            np.random.randn(hidden_units[len(hidden_units) -1], output_unit) * np.sqrt(2 / (hidden_units[-1] + output_unit))
+        ) 
         self.biases.append(np.zeros((1, output_unit)))  
 
-    def forward(
-        self, 
-        X: np.ndarray
-    ) -> np.ndarray:
+    def forward(self, X):
+        self.lyr_outputs = []
         
-        self.hidden_output: List[np.ndarray] = []
-
         # first hidden layer output
         first_output = relu(np.dot(X, self.weights[0]) + self.biases[0])   
-        self.hidden_output.append(first_output)
+        self.lyr_outputs.append(first_output)
 
         # second and more hidden layers outputs in a loop
-        for i in range(self.layer -1):
-            output = relu(np.dot(self.hidden_output[i], self.weights[i+1]) + self.biases[i+1])   
-            self.hidden_output.append(output)
+        for i in range(self.hidden_lyrs -1):
+            output = relu(np.dot(self.lyr_outputs[i], self.weights[i+1]) + self.biases[i+1])   
+            self.lyr_outputs.append(output)
 
         # final output of the model
-        self.final_output = softmax(np.dot(self.hidden_output[-1], self.weights[-1]) + self.biases[-1])   
+        self.final_output = softmax(np.dot(self.lyr_outputs[-1], self.weights[-1]) + self.biases[-1])   
         return (self.final_output)
 
-    def backward(
-        self, 
-        inputs: np.ndarray, 
-        Y: np.ndarray
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-        
+    def backward(self, inputs, Y):
         m = Y.shape[0]
-        dW: List[np.ndarray] = []
-        dB: List[np.ndarray] = []
-        error_list: List[np.ndarray] = []
+        error_list = []
+        dW = []; dB = []
 
         # Error and gradients in the output layer
         error_list.append(self.final_output - Y)                            
-        dW.append((1/m) * np.dot(self.hidden_output[-1].T, error_list[0]))  
+        dW.append((1/m) * np.dot(self.lyr_outputs[-1].T, error_list[0]))  
         dB.append((1/m) * np.sum(error_list[0], axis=0))
 
-        # Error and gradients in the hidden layers
-        for i in range(self.layer, 0, -1):
-            error_list.append(np.dot(error_list[-1], self.weights[i].T) * relu_derivative(self.hidden_output[i-1]))
-            dW.append((1/m) * np.dot(inputs.T if i == 1 else self.hidden_output[i-2].T, error_list[-1]))
+        # error and gradients in the hidden layers
+        for i in range(self.hidden_lyrs):
+            error_list.append(
+                np.dot(error_list[-1], self.weights[len(self.weights) -i -1].T) * relu_derivative(self.lyr_outputs[len(self.lyr_outputs) -i -1])
+            )
+            dW.append((1/m) * np.dot(inputs.T if i == (self.hidden_lyrs - 1) else self.lyr_outputs[len(self.lyr_outputs) -i -2].T, error_list[-1]))
             dB.append((1/m) * np.sum(error_list[-1], axis=0))
-        return (dW, dB)
+        return (dW[::-1], dB[::-1])
 
-    def update_parameters(
-        self, 
-        dW: List[np.ndarray], 
-        dB: List[np.ndarray], 
-        learning_rate: float
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-
-        for i in range(len(dW)):
-            self.weights[i] -= learning_rate * dW[len(dW) -1 -i]        # -> reverse indexing  
-            self.biases[i] -= learning_rate * dB[len(dB) -1 -i]
+    def update_parameters(self, dW, dB, alpha):
+        for idx, (w, b, dw, db) in enumerate(zip(self.weights,self.biases, dW, dB)):
+            self.weights[idx] = w - alpha * dw
+            self.biases[idx] = b - alpha * db
         return (self.weights, self.biases)
 
-    def train(
-        self, 
-        X: np.ndarray, 
-        Y: np.ndarray,
-        epoch: int, 
-        learning_rate: float
-    ) -> Tuple[List[np.ndarray], List[np.ndarray], List[float], List[float]]:
-        
-        loss_list: List[float] = []
-        accuracy_list: List[float] = []
-
+    def train(self, X, Y, epoch, learning_rate):
+        loss_list = []
+        accuracy_list = []
         for i in range(1, epoch +1):
             predictions = self.forward(X)
             dW, dB = self.backward(X, Y)
@@ -121,4 +98,10 @@ class NeuralNet:
             if i % 50 == 0:
                 print(f"Epoch: {i} | Loss: {loss} | Accuracy: %{acc * 100:.2f}")  
         return (weights, biases, loss_list, accuracy_list)
-    
+
+    def evulate(self, X, Y):
+        pred = self.forward(X)
+        loss = cross_entropy_loss(Y, pred)
+        acc = accuracy(Y, pred)
+        return (f"Test acc: {acc * 100:.2f} | Test loss: {loss}")
+        
