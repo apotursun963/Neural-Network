@@ -2,7 +2,8 @@
 This project is designed to create an artificial neural network model from scratch. It attempts to recoding the multilayer perceptron (MLP), one of the deep learning models.
 The model is evaluated on test data, calculating the accuracy and loss, and visualizing predictions.
 
-```C 
+## Usage
+```python
 from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
 from model import NeuralNet
@@ -23,5 +24,5 @@ model = NeuralNet(
 model.train(x_train, y_train, epoch=2000, learning_rate=0.01)
 ```
 
-### accuracy and loss
+## accuracy and loss
 ![acc_loss](https://github.com/user-attachments/assets/21e3ae52-a8e8-4d16-b583-86a4d8965daf)
