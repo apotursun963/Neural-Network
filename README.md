@@ -8,13 +8,6 @@ from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
 from model import NeuralNet
 
-# Data Pre-Processing
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train = x_train.reshape(60000, 28*28) / 255.0
-x_test = x_train.reshape(10000, 28*28) / 255.0
-y_train = to_categorical(y_train, num_classes=10)
-y_test = to_categorical(y_test, num_classes=10)
-
 # Building Model
 model = NeuralNet(
     input_unit=784,
