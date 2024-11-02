@@ -4,8 +4,6 @@ The model is evaluated on test data, calculating the accuracy and loss, and visu
 
 ## Usage
 ```python
-from keras._tf_keras.keras.utils import to_categorical
-from keras._tf_keras.keras.datasets import mnist
 from model import NeuralNet
 
 # Building Model
