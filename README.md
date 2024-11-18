@@ -1,4 +1,5 @@
-# Artificial Neural Netwrok
+Multi-Layer Perceptron
+----------------------
 
 ![ann](https://github.com/user-attachments/assets/eedfc466-bb47-40ee-bde4-595746552ffa)
 
