@@ -47,7 +47,7 @@ def train_model(x_train, y_train):
     )
     
     # HyperParameters
-    learning_rate = 1e-1                        # 1e-1 -> 0.1
+    learning_rate = 1e-1
     epochs = 2000
     
     time_1 = time.time()
