@@ -26,7 +26,7 @@ Loss rate for 10.000 image is: 2.83 %
 
 from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
-from model_utils import relu, softmax
+from utils import relu, softmax
 import matplotlib.pyplot as plt 
 import numpy as np
 
