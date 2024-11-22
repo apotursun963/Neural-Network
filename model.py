@@ -25,9 +25,9 @@ class NeuralNet:
         self.input_unit = input_unit
         self.hidden_units = hidden_units
         self.output_unit = output_unit
-        self.initialize_parameters()
+        self.__initialize_parameters()
 
-    def initialize_parameters(self):
+    def __initialize_parameters(self):
         """
         Initializing the weights and biases for all layers using Xavier initialization.
         """
@@ -93,7 +93,7 @@ class NeuralNet:
             dB.append((1/m) * np.sum(error_list[-1], axis=0))
         return (dW[::-1], dB[::-1])
 
-    def update_parameters(self, dW, dB, alpha):
+    def __update_parameters(self, dW, dB, alpha):
         """
         Updating weights and biases using gradient descent.
         """
@@ -111,7 +111,7 @@ class NeuralNet:
         for i in range(1, epoch +1):
             predictions = self.feedforward(X)
             dW, dB = self.backpropagation(X, Y)
-            weights, biases = self.update_parameters(dW, dB, learning_rate)
+            weights, biases = self.__update_parameters(dW, dB, learning_rate)
 
             loss = cross_entropy_loss(Y, predictions)
             loss_list.append(loss)
