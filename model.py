@@ -18,9 +18,6 @@ import numpy as np
 
 class NeuralNet:
     def __init__(self, input_unit, hidden_units, output_unit):
-        """
-        Initializing the neural network with input, hidden and output layers.
-        """
         self.hidden_lyrs = len(hidden_units)
         self.input_unit = input_unit
         self.hidden_units = hidden_units
@@ -28,9 +25,6 @@ class NeuralNet:
         self.__initialize_parameters()
 
     def __initialize_parameters(self):
-        """
-        Initializing the weights and biases for all layers using Xavier initialization.
-        """
         self.weights = []; self.biases = []
 
         # Initializing weights and biases for the input to first hidden layer
@@ -53,9 +47,6 @@ class NeuralNet:
         self.biases.append(np.zeros((1, self.output_unit)))
 
     def feedforward(self, X):
-        """
-        feed-forward stage from input layer to output layer
-        """
         self.lyr_outputs = []
 
         # first hidden layer output
@@ -72,9 +63,6 @@ class NeuralNet:
         return (self.final_output)
 
     def backpropagation(self, inputs, Y):
-        """
-        back-propagation stage from the output layer to the input layer to compute the gradients of weights and biases
-        """
         m = Y.shape[0]
         error_list = []
         dW = []; dB = []
@@ -94,18 +82,12 @@ class NeuralNet:
         return (dW[::-1], dB[::-1])
 
     def __update_parameters(self, dW, dB, alpha):
-        """
-        Updating weights and biases using gradient descent.
-        """
         for idx, (w, b, dw, db) in enumerate(zip(self.weights,self.biases, dW, dB)):
             self.weights[idx] = w - alpha * dw
             self.biases[idx] = b - alpha * db
         return (self.weights, self.biases)
 
     def train(self, X, Y, epoch, learning_rate):
-        """
-        Training the neural netwrok over a given number of epochs
-        """
         loss_list = []
         accuracy_list = []
         for i in range(1, epoch +1):
@@ -124,9 +106,6 @@ class NeuralNet:
         return (weights, biases, loss_list, accuracy_list)
 
     def evulate(self, X, Y):
-        """
-        Evulating the model on the test data.
-        """
         pred = self.feedforward(X)
         loss = cross_entropy_loss(Y, pred)
         acc = accuracy(Y, pred)
