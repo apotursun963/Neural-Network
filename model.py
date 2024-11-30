@@ -22,9 +22,9 @@ class NeuralNet:
         self.input_unit = input_unit
         self.hidden_units = hidden_units
         self.output_unit = output_unit
-        self.__initialize_parameters()
+        self.initialize_parameters()
 
-    def __initialize_parameters(self):
+    def initialize_parameters(self):
         self.weights = []; self.biases = []
 
         # Initializing weights and biases for the input to first hidden layer
@@ -81,7 +81,7 @@ class NeuralNet:
             dB.append((1/m) * np.sum(error_list[-1], axis=0))
         return (dW[::-1], dB[::-1])
 
-    def __update_parameters(self, dW, dB, alpha):
+    def update_parameters(self, dW, dB, alpha):
         for idx, (w, b, dw, db) in enumerate(zip(self.weights,self.biases, dW, dB)):
             self.weights[idx] = w - alpha * dw
             self.biases[idx] = b - alpha * db
@@ -93,7 +93,7 @@ class NeuralNet:
         for i in range(1, epoch +1):
             predictions = self.feedforward(X)
             dW, dB = self.backpropagation(X, Y)
-            weights, biases = self.__update_parameters(dW, dB, learning_rate)
+            weights, biases = self.update_parameters(dW, dB, learning_rate)
 
             loss = cross_entropy_loss(Y, predictions)
             loss_list.append(loss)
