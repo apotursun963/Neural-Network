@@ -3,8 +3,8 @@ Multi-Layer Perceptron
 
 ![ann](https://github.com/user-attachments/assets/eedfc466-bb47-40ee-bde4-595746552ffa)
 
-This project is designed to create an artificial neural network model from scratch. It attempts to recoding the multilayer perceptron (MLP), one of the deep learning models.
-The model is evaluated on test data, calculating the accuracy and loss, and visualizing predictions.
+This project is designed to create an `artificial neural network` model from scratch. It attempts to recoding the multilayer perceptron (MLP), one of the deep learning models.
+The model is evaluated on test data, calculating the accuracy and loss, and visualizing predictions. for more information >> [Model-Architecture](docs/model_architecture)
 
 ## Usage
 ```python
