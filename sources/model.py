@@ -13,7 +13,7 @@ parametreleri (ağırlıklar ve biaslar) güncelleyerek modeli eğitir.
 """
 
 
-from utils import softmax, relu, relu_derivative, accuracy, cross_entropy_loss
+from sources.utils import softmax, relu, relu_derivative, accuracy, cross_entropy_loss
 import numpy as np
 
 class NeuralNet:

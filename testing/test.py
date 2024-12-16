@@ -26,7 +26,7 @@ Loss rate for 10.000 image is: 2.83 %
 
 from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
-from utils import relu, softmax
+from sources.utils import relu, softmax
 import matplotlib.pyplot as plt 
 import numpy as np
 
@@ -41,10 +41,10 @@ def load_and_preprocess_data():
 
 # load the parameters
 def load_param():
-    W_lst = [np.load(f"Parameters\\Weight{i+1}.npy") for i in range(4)]
-    B_lst = [np.load(f"Parameters\\Bias{i+1}.npy") for i in range(4)]
+    W_lst = [np.load(f"logs\\Weight{i+1}.npy") for i in range(4)]
+    B_lst = [np.load(f"logs\\Bias{i+1}.npy") for i in range(4)]
     return (W_lst, B_lst)
-    
+
 # Prediction the model
 def predict(idx, X, W_lst, B_lst):
     X = X[idx]
