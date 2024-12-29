@@ -26,9 +26,11 @@ Loss rate for 10.000 image is: 2.83 %
 
 from keras._tf_keras.keras.utils import to_categorical
 from keras._tf_keras.keras.datasets import mnist
-from sources.utils import relu, softmax
 import matplotlib.pyplot as plt 
 import numpy as np
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from sources.utils import relu, softmax
 
 
 # Data Pre-Processing
@@ -40,13 +42,13 @@ def load_and_preprocess_data():
     return (x_test, y_test)
 
 # load the parameters
-def load_param():
-    W_lst = [np.load(f"logs\\Weight{i+1}.npy") for i in range(4)]
-    B_lst = [np.load(f"logs\\Bias{i+1}.npy") for i in range(4)]
+def load_param(directory="checkpoints"):
+    W_lst = [np.load(os.path.join(directory, f"Weight{i+1}.npy")) for i in range(4)]
+    B_lst = [np.load(os.path.join(directory, f"Bias{i+1}.npy")) for i in range(4)]
     return (W_lst, B_lst)
 
-# Prediction the model
-def predict(idx, X, W_lst, B_lst):
+# Make prediction for a single sample
+def predict_single_sample(idx, X, W_lst, B_lst):
     X = X[idx]
     output = X 
     hidden_outputs = []
@@ -56,11 +58,11 @@ def predict(idx, X, W_lst, B_lst):
     final_output = softmax(np.dot(hidden_outputs[-1], W_lst[-1]) + B_lst[-1])
     return (final_output)
 
-# Testing the model
+# Evaluate the model
 def test_mdl(x_test, y_test, W_lst, B_lst):
     n_correct = 0; n_false = 0
     for idx in range(len(x_test)):
-        mdl_pred = np.argmax(predict(idx, x_test, W_lst, B_lst))
+        mdl_pred = np.argmax(predict_single_sample(idx, x_test, W_lst, B_lst))
         n_correct += (np.argmax(y_test[idx]) == mdl_pred)             # condition return True or False 
         n_false += (np.argmax(y_test[idx]) != mdl_pred)               # if True +1 else False +0
     return (n_correct, n_false)
@@ -72,10 +74,10 @@ def acc_loss(n_true, n_false, x_test):
     print(f"Loss rate for {len(x_test)} image is: {(n_false / (n_true + n_false)) * 100:.2f} %") 
 
 # Ploting the sample of x_test
-def plot_img(x_test, y_test, W_lst, B_lst):
+def visualize_predictions(x_test, y_test, W_lst, B_lst):
     plt.figure(figsize=(8, 6))
     for idx in range(len(x_test)):
-        prediction = predict(idx, x_test, W_lst, B_lst)
+        prediction = predict_single_sample(idx, x_test, W_lst, B_lst)
         plt.subplot(3, 5, idx +1)
         plt.imshow(x_test[idx].reshape(28, 28), cmap="gray")
         plt.title(f"true: {np.argmax(y_test[idx])}\npred: {np.argmax(prediction)}")
@@ -88,8 +90,7 @@ def main():
     W_ls, B_ls = load_param()
     n_correct, n_false = test_mdl(x_test, y_test, W_ls, B_ls)
     acc_loss(n_correct, n_false, x_test)
-    plot_img(x_test[: 15], y_test[: 15], W_ls, B_ls)
+    visualize_predictions(x_test[: 15], y_test[: 15], W_ls, B_ls)
 
 if __name__ == "__main__":
     main()
-    

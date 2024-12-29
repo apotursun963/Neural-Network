@@ -12,8 +12,7 @@ ileri besleme ile tahminler yapar, geri yayılım ile hataları hesaplar ve
 parametreleri (ağırlıklar ve biaslar) güncelleyerek modeli eğitir.
 """
 
-
-from sources.utils import softmax, relu, relu_derivative, accuracy, cross_entropy_loss
+from utils import softmax, relu, relu_derivative, accuracy, cross_entropy_loss
 import numpy as np
 
 class NeuralNet:
@@ -110,4 +109,3 @@ class NeuralNet:
         loss = cross_entropy_loss(Y, pred)
         acc = accuracy(Y, pred)
         return (f"Test acc: {acc * 100:.2f} | Test loss: {loss}")
-

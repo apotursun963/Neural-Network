@@ -27,7 +27,17 @@ from keras._tf_keras.keras.datasets import mnist
 import matplotlib.pyplot as plt
 from model import NeuralNet
 import numpy as np
-import time
+import time, os
+
+
+# HyperParameters
+class Config:
+    INPUT_UNIT = 784
+    HIDDEN_UNITS = [128, 64, 32]
+    OUTPUT_UNIT = 10
+    LEARNING_RATE = 1e-1
+    EPOCHS = 2000
+    CHECKPOINT_DIR = "checkpoints"
 
 
 # Data Pre-Processing
@@ -40,24 +50,18 @@ def load_and_preprocess_data():
 
 # Building the MLP model from NeuralNet class
 def train_model(x_train, y_train): 
-    model = NeuralNet(
-        input_unit=784,                         # 784 neurons which means 784 input features 
-        hidden_units=[128, 64, 32],             # 3 hidden layers 128, 64, 23 in order
-        output_unit=10                          # 10 neurons to predict digit in (0-9)
-    )
-    
-    # HyperParameters
-    learning_rate = 1e-1
-    epochs = 2000
+    model = NeuralNet(Config.INPUT_UNIT, Config.HIDDEN_UNITS, Config.OUTPUT_UNIT)
     
     time_1 = time.time()
-    weights, biases, loss_list, accuracy_list = model.train(x_train, y_train, epochs, learning_rate)
+    weights, biases, loss_list, accuracy_list = model.train(
+        x_train, y_train, Config.EPOCHS, Config.LEARNING_RATE
+    )
     time_2 = time.time()
     print(f"Training Duration of the Model: {(time_2 - time_1) / 60:.2f} minute")
     return (weights, biases, loss_list, accuracy_list)
 
 # Ploting the accuracy and losses of the model
-def plot_acc_loss(loss_list, accuracy_list):
+def plot_metrices(loss_list, accuracy_list):
     _, axs = plt.subplots(2, 1, figsize=(8,6))
     # accuracy
     axs[0].plot(accuracy_list, label="Accuracy", color="b")
@@ -76,17 +80,18 @@ def plot_acc_loss(loss_list, accuracy_list):
     plt.show()
 
 # Saving the parameters
-def savae_parameters(weights, biases):
+def save_parameters(weights, biases, checkpoints_dir):
+    os.makedirs(checkpoints_dir, exist_ok=True)
     for idx, (weight, bias) in enumerate(zip(weights, biases)):
-        np.save(f"Weight{idx+1}.npy", weight)
-        np.save(f"Bias{idx+1}.npy", bias)
+        np.save(os.path.join(checkpoints_dir, f"Weight{idx+1}.npy"), weight)
+        np.save(os.path.join(checkpoints_dir, f"Bias{idx+1}.npy"), bias)
 
 # Main function
 def main():
     x_train, y_train = load_and_preprocess_data()
     weights, biases, loss_list, accuracy_list = train_model(x_train, y_train)
-    plot_acc_loss(loss_list, accuracy_list)
-    savae_parameters(weights, biases)
+    plot_metrices(loss_list, accuracy_list)
+    save_parameters(weights, biases, Config.CHECKPOINT_DIR)
 
 if __name__ == "__main__":
     main()
