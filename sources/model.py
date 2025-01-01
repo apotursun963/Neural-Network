@@ -64,21 +64,22 @@ class NeuralNet:
     def backpropagation(self, inputs, Y):
         m = Y.shape[0]
         error_list = []
-        dW = []; dB = []
+        derivative_W = []
+        derivative_B = []
 
         # Computing error and gradients at the output layer
         error_list.append(self.final_output - Y)                            
-        dW.append((1/m) * np.dot(self.lyr_outputs[-1].T, error_list[0]))  
-        dB.append((1/m) * np.sum(error_list[0], axis=0))
+        derivative_W.append((1/m) * np.dot(self.lyr_outputs[-1].T, error_list[0]))  
+        derivative_B.append((1/m) * np.sum(error_list[0], axis=0))
 
         # Computing error and gradients for hidden layers
         for i in range(self.hidden_lyrs):
             error_list.append(
                 np.dot(error_list[-1], self.weights[len(self.weights) -i -1].T) * relu_derivative(self.lyr_outputs[len(self.lyr_outputs) -i -1])
             )
-            dW.append((1/m) * np.dot(inputs.T if i == (self.hidden_lyrs - 1) else self.lyr_outputs[len(self.lyr_outputs) -i -2].T, error_list[-1]))
-            dB.append((1/m) * np.sum(error_list[-1], axis=0))
-        return (dW[::-1], dB[::-1])
+            derivative_W.append((1/m) * np.dot(inputs.T if i == (self.hidden_lyrs - 1) else self.lyr_outputs[len(self.lyr_outputs) -i -2].T, error_list[-1]))
+            derivative_B.append((1/m) * np.sum(error_list[-1], axis=0))
+        return (derivative_W[::-1], derivative_B[::-1])
 
     def update_parameters(self, dW, dB, alpha):
         for idx, (w, b, dw, db) in enumerate(zip(self.weights,self.biases, dW, dB)):
