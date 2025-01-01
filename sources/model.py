@@ -35,9 +35,9 @@ class NeuralNet:
         # Initializing weights and biases for hidden layers
         for i in range(self.hidden_lyrs -1):
             self.weights.append(
-                np.random.randn(self.hidden_units[i], self.hidden_units[i+1]) * np.sqrt(2 / (self.hidden_units[i] + self.hidden_units[i+1]))
+                np.random.randn(self.hidden_units[i], self.hidden_units[i + 1]) * np.sqrt(2 / (self.hidden_units[i] + self.hidden_units[i + 1]))
             ) 
-            self.biases.append(np.zeros((1, self.hidden_units[i+1]))) 
+            self.biases.append(np.zeros((1, self.hidden_units[i + 1]))) 
 
         # Initializing weights and biases for the last hidden layer to output layer
         self.weights.append(
@@ -54,7 +54,7 @@ class NeuralNet:
 
         # Subsequent hidden layers output
         for i in range(self.hidden_lyrs -1):
-            output = relu(np.dot(self.lyr_outputs[i], self.weights[i+1]) + self.biases[i+1])   
+            output = relu(np.dot(self.lyr_outputs[i], self.weights[i + 1]) + self.biases[i + 1])   
             self.lyr_outputs.append(output)
 
         # final output layer
