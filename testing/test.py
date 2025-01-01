@@ -43,8 +43,8 @@ def load_and_preprocess_data():
 
 # load the parameters
 def load_param(directory="checkpoints"):
-    W_lst = [np.load(os.path.join(directory, f"Weight{i+1}.npy")) for i in range(4)]
-    B_lst = [np.load(os.path.join(directory, f"Bias{i+1}.npy")) for i in range(4)]
+    W_lst = [np.load(os.path.join(directory, f"Weight{i + 1}.npy")) for i in range(4)]
+    B_lst = [np.load(os.path.join(directory, f"Bias{i + 1}.npy")) for i in range(4)]
     return (W_lst, B_lst)
 
 # Make prediction for a single sample
