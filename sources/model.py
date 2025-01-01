@@ -28,7 +28,7 @@ class NeuralNet:
 
         # Initializing weights and biases for the input to first hidden layer
         self.weights.append(
-            np.random.randn(self.input_unit, self.hidden_units[0]) * np.sqrt(2 / (self.input_unit + self.hidden_units[0]))
+            np.random.randn(self.input_unit, self.hidden_units[0]) * np.sqrt(2 / (self.input_unit + self.hidden_units[0]))        # He initialization
         )
         self.biases.append(np.zeros((1, self.hidden_units[0]))) 
 
