@@ -1,7 +1,7 @@
 PYTHON = python3
 
-GREEN = \033[1;32m
 YELLOW = \033[1;33m
+GREEN = \033[1;32m
 RESET = \033[0m
 
 TRAIN_SCRIPT = sources/train.py
