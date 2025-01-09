@@ -7,9 +7,6 @@ RESET = \033[0m
 TRAIN_SCRIPT = sources/train.py
 TEST_SCRIPT = testing/test.py
 
-MODEL_DIR = sources
-MODEL_NAME = neuralnet.h5
-
 train:
 	@echo "$(YELLOW)Training model...$(RESET)"
 	$(PYTHON) $(TRAIN_SCRIPT)
@@ -23,4 +20,4 @@ test:
 clean:
 	rm -rf sources/*__pycache__
 
-.PHONY: train test clean all
+.PHONY: train test clean
