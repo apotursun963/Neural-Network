@@ -20,7 +20,6 @@ test:
 	$(PYTHON) $(TEST_SCRIPT)
 	@echo "$(GREEN)Test process is over$(RESET)"
 
-# Modeli temizle
 clean:
 	rm -rf sources/*__pycache__
 
