@@ -33,7 +33,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from sources.utils import relu, softmax
 
 
-# Data Pre-Processing
 def load_and_preprocess_data():
     (_ , _), (x_test, y_test) = mnist.load_data()
     x_test = x_test.reshape(10000, 28*28) / 255.0 
@@ -41,13 +40,11 @@ def load_and_preprocess_data():
     print(f"x_test: {x_test.shape}\ny_test: {y_test.shape}")
     return (x_test, y_test)
 
-# load the parameters
 def load_param(directory="checkpoints"):
     W_lst = [np.load(os.path.join(directory, f"Weight{i + 1}.npy")) for i in range(4)]
     B_lst = [np.load(os.path.join(directory, f"Bias{i + 1}.npy")) for i in range(4)]
     return (W_lst, B_lst)
 
-# Make prediction for a single sample
 def predict_single_sample(idx, X, W_lst, B_lst):
     X = X[idx]
     output = X 
@@ -58,7 +55,6 @@ def predict_single_sample(idx, X, W_lst, B_lst):
     final_output = softmax(np.dot(hidden_outputs[-1], W_lst[-1]) + B_lst[-1])
     return (final_output)
 
-# Evaluate the model
 def test_mdl(x_test, y_test, W_lst, B_lst):
     n_correct = 0; n_false = 0
     for idx in range(len(x_test)):
@@ -67,13 +63,11 @@ def test_mdl(x_test, y_test, W_lst, B_lst):
         n_false += (np.argmax(y_test[idx]) != mdl_pred)               # if True +1 else False +0
     return (n_correct, n_false)
 
-# Calculate accuracy and loss rating
 def acc_loss(n_true, n_false, x_test):
     print(f"number of false: {n_false} | number of correct: {n_true}")
     print(f"Accuracy rate for {len(x_test)} image is: {(n_true / (n_true + n_false)) * 100:.2f} %") 
     print(f"Loss rate for {len(x_test)} image is: {(n_false / (n_true + n_false)) * 100:.2f} %") 
 
-# Ploting the sample of x_test
 def visualize_predictions(x_test, y_test, W_lst, B_lst):
     plt.figure(figsize=(8, 6))
     for idx in range(len(x_test)):
@@ -84,7 +78,6 @@ def visualize_predictions(x_test, y_test, W_lst, B_lst):
         plt.axis("off")
     plt.show()
 
-# Main function to execute the program
 def main():
     x_test, y_test = load_and_preprocess_data()
     W_ls, B_ls = load_param()

@@ -40,7 +40,6 @@ class Config:
     CHECKPOINT_DIR = "checkpoints"
 
 
-# Data Pre-Processing
 def load_and_preprocess_data():
     (x_train, y_train), (_ , _) = mnist.load_data()
     x_train = x_train.reshape(60000, 28*28) / 255.0
@@ -60,7 +59,6 @@ def train_model(x_train, y_train):
     print(f"Training Duration of the Model: {(time_2 - time_1) / 60:.2f} minute")
     return (weights, biases, loss_list, accuracy_list)
 
-# Ploting the accuracy and losses of the model
 def plot_metrices(loss_list, accuracy_list):
     _, axs = plt.subplots(2, 1, figsize=(8,6))
     # accuracy
@@ -79,14 +77,12 @@ def plot_metrices(loss_list, accuracy_list):
     plt.tight_layout()
     plt.show()
 
-# Saving the parameters
 def save_parameters(weights, biases, checkpoints_dir):
     os.makedirs(checkpoints_dir, exist_ok=True)
     for idx, (weight, bias) in enumerate(zip(weights, biases)):
         np.save(os.path.join(checkpoints_dir, f"Weight{idx+1}.npy"), weight)
         np.save(os.path.join(checkpoints_dir, f"Bias{idx+1}.npy"), bias)
 
-# Main function
 def main():
     x_train, y_train = load_and_preprocess_data()
     weights, biases, loss_list, accuracy_list = train_model(x_train, y_train)

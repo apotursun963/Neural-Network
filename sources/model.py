@@ -27,16 +27,22 @@ class NeuralNet:
         self.weights = []; self.biases = []
 
         # Initializing weights and biases for the input to first hidden layer
-        self.weights.append(np.random.randn(self.input_unit, self.hidden_units[0]) * np.sqrt(2 / (self.input_unit + self.hidden_units[0])))        # He initialization
+        self.weights.append(
+            np.random.randn(self.input_unit, self.hidden_units[0]) * np.sqrt(2 / (self.input_unit + self.hidden_units[0]))      # He initialization
+        )
         self.biases.append(np.zeros((1, self.hidden_units[0]))) 
 
         # Initializing weights and biases for hidden layers
         for i in range(self.hidden_lyrs -1):
-            self.weights.append(np.random.randn(self.hidden_units[i], self.hidden_units[i + 1]) * np.sqrt(2 / (self.hidden_units[i] + self.hidden_units[i + 1]))) 
+            self.weights.append(
+                np.random.randn(self.hidden_units[i], self.hidden_units[i + 1]) * np.sqrt(2 / (self.hidden_units[i] + self.hidden_units[i + 1]))
+            ) 
             self.biases.append(np.zeros((1, self.hidden_units[i + 1]))) 
 
         # Initializing weights and biases for the last hidden layer to output layer
-        self.weights.append(np.random.randn(self.hidden_units[len(self.hidden_units) -1], self.output_unit) * np.sqrt(2 / (self.hidden_units[-1] + self.output_unit))) 
+        self.weights.append(
+            np.random.randn(self.hidden_units[len(self.hidden_units) -1], self.output_unit) * np.sqrt(2 / (self.hidden_units[-1] + self.output_unit))
+        ) 
         self.biases.append(np.zeros((1, self.output_unit)))
 
     def feedforward(self, X):
@@ -68,7 +74,9 @@ class NeuralNet:
 
         # Computing error and gradients for hidden layers
         for i in range(self.hidden_lyrs):
-            error_list.append(np.dot(error_list[-1], self.weights[len(self.weights) -i -1].T) * relu_derivative(self.lyr_outputs[len(self.lyr_outputs) -i -1]))
+            error_list.append(
+                np.dot(error_list[-1], self.weights[len(self.weights) -i -1].T) * relu_derivative(self.lyr_outputs[len(self.lyr_outputs) -i -1])
+            )
             derivative_W.append((1/m) * np.dot(inputs.T if i == (self.hidden_lyrs - 1) else self.lyr_outputs[len(self.lyr_outputs) -i -2].T, error_list[-1]))
             derivative_B.append((1/m) * np.sum(error_list[-1], axis=0))
         return (derivative_W[::-1], derivative_B[::-1])
